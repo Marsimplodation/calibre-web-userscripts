@@ -5,6 +5,7 @@ This repository contains user scripts to enhance the Calibre Web experience.
 **Scripts:**
 - **minified/\***: A minified version of the src version, for easy copy
 - **pageSizeAndJump.js**: Control page width and navigate between pages.
+- **annotations.js**: A WIP annotations module
 
 **Requirements:**
 - **Tampermonkey**: User script manager for your browser.
