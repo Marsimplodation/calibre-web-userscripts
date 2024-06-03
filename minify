@@ -1,0 +1,2 @@
+head src/pageSizeAndJump.js > minified/minPNJ.js
+uglifyjs src/pageSizeAndJump.js | tr -d '\n' >> minified/minPNJ.js
