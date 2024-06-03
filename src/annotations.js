@@ -80,12 +80,13 @@ function draw(e) {
     var fx = canvas.width / canvas.scrollWidth;
     var fy = canvas.height / canvas.scrollHeight;
     var x = e.clientX - canvas.getBoundingClientRect().left;
-    x = canvas.width - x * fx;
+    x = x * fx;
     var y = e.clientY - canvas.getBoundingClientRect().top;
     y *= fy;
     ctx.lineWidth = getValueOf("writing-size");
     ctx.lineCap = 'round';
-    if (getValueOf("is-marker")) ctx.globalCompositeOperation = 'multiply';
+    if (document.getElementById("is-marker").checked) ctx.globalCompositeOperation = 'multiply';
+    else ctx.globalCompositeOperation = "source-over";
     ctx.strokeStyle = hexToRgba(getValueOf("writing-color"), getValueOf("writing-opacity"));
     ctx.lineTo(x, y);
     ctx.stroke();
