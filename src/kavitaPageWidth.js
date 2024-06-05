@@ -11,7 +11,10 @@
 
 (function() {
         'use strict';
+        
 
+
+        //------------ Manage Cookies ----------//
         function setCookie(name, value, dayToExpire) {
                 var expDate = new Date();
                 expDate.setDate(expDate.getDate + dayToExpire);
@@ -34,55 +37,57 @@
                 }
                 return "";
         }
-// Function to modify CSS rules
-function modifyImageWidth(percentage) {
-  // Get all stylesheets in the document
-  const styleSheets = document.styleSheets;
-  
-  // Iterate over each stylesheet
-  for (let i = 0; i < styleSheets.length; i++) {
-    const styleSheet = styleSheets[i];
-    try {
-      // Get all CSS rules in the stylesheet
-      const cssRules = styleSheet.cssRules || styleSheet.rules;
-      
-      // Iterate over each CSS rule
-      for (let j = 0; j < cssRules.length; j++) {
-        const rule = cssRules[j];
-        
-        // Check if the rule is for elements with _ngcontent-ng-* attribute
-        if (rule.selectorText && rule.selectorText.includes('img') && rule.selectorText.includes('content')) {
-          // Modify the styles
-         
-          rule.style.width = percentage + "%";
-        }
-      }
-    } catch (e) {
-      // Catch and ignore any errors accessing stylesheets from different origins
-      console.warn('Error accessing stylesheet:', styleSheet.href, e);
-    }
-  }
-}
 
-var currentValue = getCookie("page-width");
-
-var newScaling = document.createElement('input');
-newScaling.type = "range";
-newScaling.className = "form-range";
-newScaling.min = 0;
-newScaling.max = 100;
-newScaling.value = currentValue;
-newScaling.addEventListener('input', function(){
+        //----------- Global Variables ---------//
+        var currentValue = getCookie("page-width");
+        var newScaling = document.createElement('input');
+        newScaling.type = "range";
+        newScaling.className = "form-range";
+        newScaling.min = 0;
+        newScaling.max = 100;
+        newScaling.value = currentValue;
+        newScaling.addEventListener('input', function() {
                 modifyImageWidth(this.value);
                 setCookie("page-width", this.value, 30);
-});
+        });
 
-function replace() {
-	var scaling = document.getElementById("page-fitting");
-  if(!scaling) return;
-	scaling.replaceWith(newScaling);
-}
+        //---------- logic --------//
+        //modify the image style
+        function modifyImageWidth(percentage) {
+                // Get all stylesheets in the document
+                const styleSheets = document.styleSheets;
 
-setInterval(replace, 100);
+                // Iterate over each stylesheet
+                for (let i = 0; i < styleSheets.length; i++) {
+                        const styleSheet = styleSheets[i];
+                        // Get all CSS rules in the stylesheet
+                        const cssRules = styleSheet.cssRules || styleSheet.rules;
+
+                        // Iterate over each CSS rule
+                        for (let j = 0; j < cssRules.length; j++) {
+                                const rule = cssRules[j];
+
+                                // Check if the rule is for elements with _ngcontent-ng-* attribute
+                                if (rule.selectorText && rule.selectorText.includes('img') && rule.selectorText.includes('content')) {
+                                        // Modify the styles
+
+                                        rule.style.width = percentage + "%";
+                                }
+                        }
+                }
+        }
+
+
+        //try to replace the width option
+        function replace() {
+                var scaling = document.getElementById("page-fitting");
+                if (!scaling) return;
+                scaling.replaceWith(newScaling);
+        }
+
+        //-------- run at start ----------//
+        //give the page a second to load before modifying the width
+        setTimeout(function(){modifyImageWidth(currentValue);}, 1000);
+        setInterval(replace, 100);
 
 })();
